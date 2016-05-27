@@ -1,0 +1,7 @@
+# 2016-05-27
+
+- Updated code to use the viridis color palette 
+  (https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html)
+  instead of the hideous blue->red
+
+- Added doxygen comments (not done tho)
