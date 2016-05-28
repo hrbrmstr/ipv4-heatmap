@@ -5,6 +5,9 @@
   instead of the hideous blue->red
 
 - Added support for brbg puor rdbu rdgy rdylbu spectral bupu reds ylgnbu ylorbr ylorrd
-  colorbrewer palettes.
+  colorbrewer palettes via `-P` switch
+
+- Added support to invert the color palette direction via `-i` switch
 
 - Added doxygen comments (not done tho)
+

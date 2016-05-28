@@ -5,6 +5,10 @@
  * http://maps.measurement-factory.com/
  */
 
+/**
+ * 2016 update by Bob Rudis (@hrbrmstr)
+ */
+
 /*
  * ipv4-heatmap produces a "map" of IPv4 address space.
  *
@@ -14,7 +18,7 @@
  * http://xkcd.com/195/ and http://en.wikipedia.org/wiki/Hilbert_curve see
  * Hacker's Delight (Henry S. Warren, Jr. 2002), sec 14-2, fig 14-5
  *
- * output is a squre PNG file
+ * output is a squre png or gif file
  */
 
 #include <assert.h>
@@ -37,7 +41,7 @@
 #include "colors.h"
 
 #define NUM_DATA_COLORS 256
-#define RELEASE_VER "20160527"
+#define RELEASE_VER "2.0.0"
 
 #define hash_brbg 6385090210
 #define hash_piyg 6385584286
@@ -59,6 +63,7 @@ extern void annotate_file(const char *fn);
 extern void shade_file(const char *fn);
 extern void legend(const char *, const char *orient);
 
+// this is the main structure to hold the heatmap
 gdImagePtr image = NULL;
 
 int colors[NUM_DATA_COLORS];
@@ -107,15 +112,19 @@ double log_A = 0.0;
 double log_B = 0.0;
 double log_C = 0.0;
 
+
+/**
+ * @brief hash function so we can use strings in switch
+ */
 const unsigned long hash(const char *str) {
-    unsigned long hash = 5381;  
-    int c;
 
-    while ((c = *str++))
-        hash = ((hash << 5) + hash) + c;
-    return hash;
+  unsigned long hash = 5381;  
+  int c;
+
+  while ((c = *str++)) hash = ((hash << 5) + hash) + c;
+  return hash;
+
 }
-
 
 /**
  * @brief Initialize gd image and hilbert colors
@@ -346,10 +355,11 @@ void paint(void) {
      * next field is an IP address.  We also accept its integer notation
      * equivalent.
      */
+
     t = strtok(strtok_arg, whitespace);
     strtok_arg = NULL;
-    if (NULL == t)
-      continue;
+    if (NULL == t) continue;
+
     if (strspn(t, "0123456789") == strlen(t))
       i = strtoul(t, NULL, 10);
     else if (1 == inet_pton(AF_INET, t, &i))
@@ -357,8 +367,7 @@ void paint(void) {
     else
       errx(1, "bad input parsing IP on line %d: %s", line, t);
 
-    if (0 == xy_from_ip(i, &x, &y))
-      continue;
+    if (0 == xy_from_ip(i, &x, &y)) continue;
 
     if (debug > 2) fprintf(stderr, "%s => %u => (%d,%d)\n", t, i, x, y);
 
@@ -369,27 +378,28 @@ void paint(void) {
      */
     t = strtok(NULL, whitespace);
     if (NULL != t) {
+
       k = atoi(t);
-      if (accumulate_counts)
-        k += get_pixel_value(x, y);
-      if (0.0 != log_A) {
-        /*
-         * apply logarithmic stretching
-         */
-        k = (int)((log_C * log((double)k / log_A)) + 0.5);
-      }
+      if (accumulate_counts) k += get_pixel_value(x, y);
+      if (0.0 != log_A) k = (int)((log_C * log((double)k / log_A)) + 0.5); // apply logarithmic stretching
+
     } else {
+
       k = get_pixel_value(x, y);
       k++;
+
     }
-    if (k < 0)
-      k = 0;
-    if (k >= NUM_DATA_COLORS)
-      k = NUM_DATA_COLORS - 1;
+
+    if (k < 0) k = 0;
+
+    if (k >= NUM_DATA_COLORS) k = NUM_DATA_COLORS - 1;
+
     color = colors[k];
 
     gdImageSetPixel(image, x, y, color);
+
     line++;
+
   }
 
 }
@@ -398,62 +408,89 @@ void paint(void) {
  * @brief Add watermark to the hilbert gd image
  */
 void watermark(void) {
+
   int color = gdImageColorAllocateAlpha(image, 127, 127, 127, 63);
+
   gdImageStringUp(image, gdFontGetSmall(), gdImageSX(image) - 20, 220,
                   (u_char *)"", color);
+
 }
 
 /**
  * @brief Write hilbert gd image to a png file
  */
 void save(void) {
+
   FILE *pngout = fopen(savename, "wb");
+
   gdImagePng(image, pngout);
+
   fclose(pngout);
+
   gdImageDestroy(image);
+
   image = NULL;
+
 }
 
 /**
  * @brief Write hilbert gd image to a gif file
  */
 void savegif(int done) {
+
   static int ngif = 0;
   static char *tdir = NULL;
   static char tmpl[] = "heatmap-tmp-XXXXXX";
   char fname[512];
   FILE *gifout = NULL;
+
   if (NULL == tdir) {
+
     tdir = mkdtemp(tmpl);
-    if (NULL == tdir)
-      err(1, "%s", tmpl);
+    if (NULL == tdir) err(1, "%s", tmpl);
+
   }
+
   snprintf(fname, 512, "%s/%07d.gif", tdir, ngif++);
+
   gifout = fopen(fname, "wb");
-  if (NULL == gifout)
-    err(1, "%s", fname);
+
+  if (NULL == gifout) err(1, "%s", fname);
+
   gdImageGif(image, gifout);
+  
   fclose(gifout);
+
   /* don't destroy image! */
   if (done) {
+
     char cmd[512];
+
     snprintf(cmd, 512, "gifsicle --colors 256 %s/*.gif > %s", tdir, savename);
     fprintf(stderr, "Executing: %s\n", cmd);
-    if (0 != system(cmd))
-      errx(1, "gifsicle failed");
+
+    if (0 != system(cmd)) errx(1, "gifsicle failed");
+
     snprintf(cmd, 512, "rm -rf %s", tdir);
     fprintf(stderr, "Executing: %s\n", cmd);
+    
     system(cmd);
+    
     tdir = NULL;
+    
     gdImageDestroy(image);
+    
     image = NULL;
+
   }
+
 }
 
 /**
  * @brief Display usage
  */
 void usage(const char *argv0) {
+
   const char *t = strrchr(argv0, '/');
   printf("IPv4 Heatmap"
 #ifdef RELEASE_VER
@@ -487,13 +524,17 @@ void usage(const char *argv0) {
   printf("\t-y cidr    address space to render\n");
   printf("\t-z bits    address space bits per pixel\n");
   exit(1);
+
 }
 
 // -------------------------------------------------------------------------
 
 int main(int argc, char *argv[]) {
+
   int ch;
+
   while ((ch = getopt(argc, argv, "A:B:a:Cc:df:g:hik:mo:P:prs:t:u:y:z:")) != -1) {
+
     switch (ch) {
     case 'A':
       log_A = atof(optarg);
@@ -564,22 +605,27 @@ int main(int argc, char *argv[]) {
       break;
     }
   }
+
   argc -= optind;
   argv += optind;
 
   initialize();
+  
   paint();
-  if (shadings)
-    shade_file(shadings);
-  if (annotations)
-    annotate_file(annotations);
-  if (title)
-    legend(title, legend_orient);
+  
+  if (shadings) shade_file(shadings);
+  
+  if (annotations) annotate_file(annotations);
+  
+  if (title) legend(title, legend_orient);
+  
   watermark();
+  
   if (anim_gif.secs)
     savegif(1);
   else
     save();
+
   return 0;
 
 }
