@@ -4,4 +4,7 @@
   (https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html)
   instead of the hideous blue->red
 
+- Added support for brbg puor rdbu rdgy rdylbu spectral bupu reds ylgnbu ylorbr ylorrd
+  colorbrewer palettes.
+
 - Added doxygen comments (not done tho)

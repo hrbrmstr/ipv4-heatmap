@@ -34,10 +34,26 @@
 #include <gdfonts.h>
 
 #include "cidr.h"
-#include "viridis.h"
+#include "colors.h"
 
 #define NUM_DATA_COLORS 256
 #define RELEASE_VER "20160527"
+
+#define hash_brbg 6385090210
+#define hash_piyg 6385584286
+#define hash_prgn 6385593500
+#define hash_puor 6385597035
+#define hash_rdbu 6385649970
+#define hash_rdgy 6385650139
+#define hash_rdylbu 6953973637431
+#define hash_rdylgn 6953973637589
+#define hash_spectral 7572934614486723
+#define hash_bupu 6385093953
+#define hash_reds 6385651123
+#define hash_ylgnbu 6954256427862
+#define hash_ylorbr 6954256719711
+#define hash_ylorrd 6954256720225
+#define hash_viridis 229486483176703
 
 extern void annotate_file(const char *fn);
 extern void shade_file(const char *fn);
@@ -48,6 +64,7 @@ gdImagePtr image = NULL;
 int colors[NUM_DATA_COLORS];
 int num_colors = NUM_DATA_COLORS;
 int debug = 0;
+int invert = 0;
 
 const char *whitespace = " \t\r\n";
 const char *font_file_or_name = "Luxi Mono:style=Regular";
@@ -69,6 +86,7 @@ struct {
 } anim_gif = {0, 0.0, 0};
 
 const char *legend_keyfile = NULL;
+const char *palette = "viridis";
 const char *savename = "map.png";
 extern int annotateColor;
 
@@ -88,6 +106,16 @@ void savegif(int done);
 double log_A = 0.0;
 double log_B = 0.0;
 double log_C = 0.0;
+
+const unsigned long hash(const char *str) {
+    unsigned long hash = 5381;  
+    int c;
+
+    while ((c = *str++))
+        hash = ((hash << 5) + hash) + c;
+    return hash;
+}
+
 
 /**
  * @brief Initialize gd image and hilbert colors
@@ -131,16 +159,117 @@ void initialize(void) {
   /* first allocated color becomes background by default */
   if (reverse_flag) gdImageFill(image, 0, 0, gdImageColorAllocate(image, 255, 255, 255));
 
-  /*
-   * The new color map is viridis-based
-   */
-  double hue;
+  int start = 0, end = NUM_DATA_COLORS, j;
+
+  if (debug) fprintf(stderr, "invert = %d\n", invert);
+
+  switch(hash(palette)) {
+    case hash_brbg:
+      for (int i=start; i<end; i++) {
+        j = (invert ? NUM_DATA_COLORS - i : i);
+        red[i] = brbg_red[j];
+        green[i] = brbg_green[j];
+        blue[i] = brbg_blue[j];
+      };
+      break; 
+    case hash_puor:
+      for (int i=start; i<end; i++) {
+        j = (invert ? NUM_DATA_COLORS - i : i);
+        red[i] = puor_red[j];
+        green[i] = puor_green[j];
+        blue[i] = puor_blue[j];
+      };
+      break;
+    case hash_rdbu:
+      for (int i=start; i<end; i++) {
+        j = (invert ? NUM_DATA_COLORS - i : i);
+        red[i] = rdbu_red[j];
+        green[i] = rdbu_green[j];
+        blue[i] = rdbu_blue[j];
+      };
+      break;
+    case hash_rdgy:
+      for (int i=start; i<end; i++) {
+        j = (invert ? NUM_DATA_COLORS - i : i);
+        red[i] = rdgy_red[j];
+        green[i] = rdgy_green[j];
+        blue[i] = rdgy_blue[j];
+      };
+      break;
+    case hash_rdylbu:
+      for (int i=start; i<end; i++) {
+        j = (invert ? NUM_DATA_COLORS - i : i);
+        red[i] = rdylbu_red[j];
+        green[i] = rdylbu_green[j];
+        blue[i] = rdylbu_blue[j];
+      };
+      break;
+    case hash_spectral:
+      for (int i=start; i<end; i++) {
+        j = (invert ? NUM_DATA_COLORS - i : i);
+        red[i] = spectral_red[j];
+        green[i] = spectral_green[j];
+        blue[i] = spectral_blue[j];
+      };
+      break;
+    case hash_bupu:
+      for (int i=start; i<end; i++) {
+        j = (invert ? NUM_DATA_COLORS - i : i);
+        red[i] = bupu_red[j];
+        green[i] = bupu_green[j];
+        blue[i] = bupu_blue[j];
+      };
+      break;
+    case hash_reds:
+      for (int i=start; i<end; i++) {
+        j = (invert ? NUM_DATA_COLORS - i : i);
+        red[i] = reds_red[j];
+        green[i] = reds_green[j];
+        blue[i] = reds_blue[j];
+      };
+      break;
+    case hash_ylgnbu:
+      for (int i=start; i<end; i++) {
+        j = (invert ? NUM_DATA_COLORS - i : i);
+        red[i] = ylgnbu_red[j];
+        green[i] = ylgnbu_green[j];
+        blue[i] = ylgnbu_blue[j];
+      };
+      break;
+    case hash_ylorbr:
+      for (int i=start; i<end; i++) {
+        j = (invert ? NUM_DATA_COLORS - i : i);
+        red[i] = ylorbr_red[j];
+        green[i] = ylorbr_green[j];
+        blue[i] = ylorbr_blue[j];
+      };
+      break;
+    case hash_ylorrd:
+      for (int i=start; i<end; i++) {
+        j = (invert ? NUM_DATA_COLORS - i : i);
+        red[i] = ylorrd_red[j];
+        green[i] = ylorrd_green[j];
+        blue[i] = ylorrd_blue[j];
+      };
+      break;
+    default:
+      for (int i=start; i<end; i++) {
+        j = (invert ? NUM_DATA_COLORS - i : i);
+        red[i] = viridis_red[j];
+        green[i] = viridis_green[j];
+        blue[i] = viridis_blue[j];
+      };
+      break;
+  };
+
   for (i = 0; i < NUM_DATA_COLORS; i++) {
-    hue = 240.0 * (255 - i) / 255;
+
     colors[i] = gdImageColorAllocate(image, red[i], green[i], blue[i]);
+
     if (debug > 1)
-      fprintf(stderr, "colors[%d]=%d {%f, %f, %f} {%f}\n", 
-        i, colors[i], red[i], green[i], blue[i], hue);
+      fprintf(stderr, "colors[%d]=%d {%f, %f, %f}\n", 
+        i, colors[i], red[i], green[i], blue[i]);
+
   }
 
   /*
@@ -163,10 +292,10 @@ int get_pixel_value(unsigned int x, unsigned int y) {
   int color;
   int k;
   color = gdImageGetPixel(image, x, y);
-  if (debug) fprintf(stderr, "[%d,%d] color idx %d\n", x, y, color);
+  if (debug > 1) fprintf(stderr, "[%d,%d] color idx %d\n", x, y, color);
   for (k = 0; k < NUM_DATA_COLORS; k++) {
     if (colors[k] == color) {
-      if (debug) fprintf(stderr, "color %d has idx %d\n", color, k);
+      if (debug > 1) fprintf(stderr, "color %d has idx %d\n", color, k);
       break;
     }
   }
@@ -231,8 +360,7 @@ void paint(void) {
     if (0 == xy_from_ip(i, &x, &y))
       continue;
 
-    if (debug)
-      fprintf(stderr, "%s => %u => (%d,%d)\n", t, i, x, y);
+    if (debug > 2) fprintf(stderr, "%s => %u => (%d,%d)\n", t, i, x, y);
 
     /*
      * next field is an optional value, which might also be
@@ -346,9 +474,11 @@ void usage(const char *argv0) {
   printf("\t-f font    fontconfig name or .ttf file\n");
   printf("\t-g secs    make animated gif from each secs of data\n");
   printf("\t-h         draw horizontal legend instead\n");
+  printf("\t-i         invert the order for the selected color palette\n");
   printf("\t-k file    key file for legend\n");
   printf("\t-m         use morton order instead of hilbert\n");
   printf("\t-o file    output filename\n");
+  printf("\t-P palette choose color palette (viridis, brbg puor rdbu rdgy rdylbu spectral\n\t           bupu reds ylgnbu ylorbr ylorrd). Defaults to viridis.\n");
   printf("\t-p         show size of prefixes in legend\n");
   printf("\t-r         reverse; white background, black text\n");
   printf("\t-s file    shading file\n");
@@ -363,7 +493,7 @@ void usage(const char *argv0) {
 
 int main(int argc, char *argv[]) {
   int ch;
-  while ((ch = getopt(argc, argv, "A:B:a:Cc:df:g:hk:mo:prs:t:u:y:z:")) != -1) {
+  while ((ch = getopt(argc, argv, "A:B:a:Cc:df:g:hik:mo:P:prs:t:u:y:z:")) != -1) {
     switch (ch) {
     case 'A':
       log_A = atof(optarg);
@@ -395,6 +525,9 @@ int main(int argc, char *argv[]) {
     case 'h':
       legend_orient = "horiz";
       break;
+    case 'i':
+      invert = 1;
+      break;
     case 'k':
       legend_keyfile = strdup(optarg);
       break;
@@ -407,6 +540,9 @@ int main(int argc, char *argv[]) {
       break;
     case 't':
       title = strdup(optarg);
+      break;
+    case 'P':
+      palette = strdup(optarg);
       break;
     case 'p':
       legend_prefixes_flag = 1;
