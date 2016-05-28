@@ -17,7 +17,7 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 
-#include "cidr.h"
+#include "include/cidr.h"
 
 unsigned int allones = ~0;
 

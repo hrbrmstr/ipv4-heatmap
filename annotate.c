@@ -16,7 +16,7 @@
 #include <unistd.h>
 
 #include <gd.h>
-#include "bbox.h"
+#include "include/bbox.h"
 
 /*
  * FONT_ALPHA sets the transparency for the annotations. in libgd, 0 means 100%

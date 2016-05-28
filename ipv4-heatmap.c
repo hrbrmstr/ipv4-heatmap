@@ -37,8 +37,8 @@
 #include <gd.h>
 #include <gdfonts.h>
 
-#include "cidr.h"
-#include "colors.h"
+#include "include/cidr.h"
+#include "include/colors.h"
 
 #define NUM_DATA_COLORS 256
 #define RELEASE_VER "2.0.0"
@@ -497,9 +497,9 @@ void usage(const char *argv0) {
          " (release " RELEASE_VER ")"
 #endif
          "\n");
-  printf("(C) 2007 The Measurement Factory, Inc\n");
-  printf("Licensed under the GPL, version 2\n");
+  printf("(C) 2007 The Measurement Factory, Inc (GPL-2)\n");
   printf("http://maps.measurement-factory.com/\n");
+  printf("Version 2 by Bob Rudis\n");
   printf("\n");
   printf("usage: %s [options] < iplist\n", t ? t + 1 : argv0);
   printf("\t-A float   logarithmic scaling, min value\n");
@@ -523,6 +523,7 @@ void usage(const char *argv0) {
   printf("\t-u str     scale title in legend\n");
   printf("\t-y cidr    address space to render\n");
   printf("\t-z bits    address space bits per pixel\n");
+  printf("\t-?         display usage\n");
   exit(1);
 
 }
@@ -533,7 +534,7 @@ int main(int argc, char *argv[]) {
 
   int ch;
 
-  while ((ch = getopt(argc, argv, "A:B:a:Cc:df:g:hik:mo:P:prs:t:u:y:z:")) != -1) {
+  while ((ch = getopt(argc, argv, "A:B:a:Cc:df:g:hik:mo:P:prs:t:u:y:z:?")) != -1) {
 
     switch (ch) {
     case 'A':
@@ -600,6 +601,7 @@ int main(int argc, char *argv[]) {
     case 'z':
       set_bits_per_pixel(strtol(optarg, NULL, 10));
       break;
+    case '?':
     default:
       usage(argv[0]);
       break;

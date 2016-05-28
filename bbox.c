@@ -19,8 +19,8 @@
 
 #include <gd.h>
 
-#include "bbox.h"
-#include "cidr.h"
+#include "include/bbox.h"
+#include "include/cidr.h"
 
 #ifndef MIN
 #define MIN(a, b) (a < b ? a : b)

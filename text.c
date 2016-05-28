@@ -16,7 +16,7 @@
 #include <unistd.h>
 
 #include <gd.h>
-#include "bbox.h"
+#include "include/bbox.h"
 
 extern gdImagePtr image;
 extern const char *font_file_or_name;

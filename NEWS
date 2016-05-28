@@ -11,3 +11,10 @@
 
 - Added doxygen comments (not done tho)
 
+- Included Liberation Sans TTF font
+
+- Included small (1m) example data set
+
+- Added `-?` command line switch to display usage
+
+- Reorganized directory structure

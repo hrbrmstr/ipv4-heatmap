@@ -18,7 +18,7 @@
 #include <unistd.h>
 
 #include <gd.h>
-#include "bbox.h"
+#include "include/bbox.h"
 
 #define MAX(a, b) (a > b ? a : b)
 

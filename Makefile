@@ -25,4 +25,4 @@ clean:
 
 install: ipv4-heatmap
 	install -C -m 755 ipv4-heatmap /usr/local/bin
-	install -C -m 755 ipv4-heatmap.1 /usr/local/man/man1
+	install -C -m 755 man/ipv4-heatmap.1 /usr/local/man/man1

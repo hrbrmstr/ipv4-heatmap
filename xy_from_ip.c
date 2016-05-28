@@ -6,7 +6,7 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 
-#include "cidr.h"
+#include "include/cidr.h"
 
 extern void hil_xy_from_s(unsigned s, int n, unsigned *xp, unsigned *yp);
 extern void mor_xy_from_s(unsigned s, int n, unsigned *xp, unsigned *yp);

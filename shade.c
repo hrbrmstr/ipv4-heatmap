@@ -16,7 +16,7 @@
 #include <unistd.h>
 
 #include <gd.h>
-#include "bbox.h"
+#include "include/bbox.h"
 
 extern gdImagePtr image;
 extern int debug;
