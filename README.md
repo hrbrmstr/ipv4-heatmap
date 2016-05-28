@@ -10,7 +10,7 @@ If you really need your "blue->red" back, use `-i -P rdbu`
 
 ![](./maps/rdbu-inverted.png)
 
-I would have included more example images but they are YUGE.
+I would have included more example images but they are YUGE, so you can find them [here](https://www.dropbox.com/sh/wqyly8ewxeko5jn/AAC5bHIpQTuxWGBPYzMqceLQa?dl=0).
 
 Liberation Sans has been included to provide an alternative to the X11 font the original program seems desperate to use. This is an example for how to use TTF fonts (not all TTF fonts seem to work):
 
