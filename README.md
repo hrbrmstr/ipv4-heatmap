@@ -1,3 +1,6 @@
+
+[![Build Status](https://travis-ci.org/hrbrmstr/ipv4-heatmap.svg?branch=master)](https://travis-ci.org/hrbrmstr/ipv4-heatmap)
+
 # ipv4-heatmap
 
 Update to The Measurement Factory ipv4-heatmap codebase (i.e. the seminal code to generate Hilbert curve IPv4 heatmaps)

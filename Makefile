@@ -28,8 +28,8 @@ endif
 ifdef CC
   LD = $(CC)
 else 
-  CC = gcc
-  LD = gcc
+  CC = gcc -std=c99 
+  LD = gcc -std=c99 
   ifeq ($(uname_S),Darwin)
     CC = clang
     LD = clang
