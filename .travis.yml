@@ -1,19 +1,11 @@
 language: c
-sudo: required
-dist: trusty
 
 os:
-  - linux
   - osx
 
 compiler:
   - gcc
   - clang
-
-addons:
-  apt:
-    packages:
-      - libgd2
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update        ; fi
