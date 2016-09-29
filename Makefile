@@ -10,7 +10,7 @@ uname_P := $(shell sh -c 'uname -p 2>/dev/null || echo not')
 uname_V := $(shell sh -c 'uname -v 2>/dev/null || echo not')
 
 ifndef CFLAGS
-  CFLAGS = -std=c99 -Wall -O3 -I/usr/local/include
+  CFLAGS = -Wall -O3 -I/usr/local/include
 endif
 
 ifndef LDFLAGS
@@ -28,7 +28,7 @@ endif
 ifdef CC
   LD = $(CC)
 else 
-  CC = gcc 
+  CC = gcc	 
   LD = gcc 
   ifeq ($(uname_S),Darwin)
     CC = clang

@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <getopt.h>
 
 #include <arpa/inet.h>
 #include <netinet/in.h>
@@ -58,6 +59,10 @@
 #define hash_ylorbr 6954256719711
 #define hash_ylorrd 6954256720225
 #define hash_viridis 229486483176703
+
+typedef unsigned char u_char;
+typedef unsigned int  u_int;
+typedef unsigned long u_long;
 
 extern void annotate_file(const char *fn);
 extern void shade_file(const char *fn);
@@ -409,7 +414,9 @@ void paint(void) {
  */
 void watermark(void) {
 
-  int color = gdImageColorAllocateAlpha(image, 127, 127, 127, 63);
+  int color;
+
+  color = gdImageColorAllocateAlpha(image, 127, 127, 127, 63);
 
   gdImageStringUp(image, gdFontGetSmall(), gdImageSX(image) - 20, 220,
                   (u_char *)"", color);
