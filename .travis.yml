@@ -11,7 +11,7 @@ compiler:
 addons:
   apt:
     packages:
-      - libgd-dev
+      - libgd2-noxpm-dev
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update        ; fi
