@@ -1,0 +1,26 @@
+language: c
+
+os:
+  - linux
+  - osx
+
+compiler:
+  - gcc
+  - clang
+
+addons:
+  apt:
+    packages:
+      - libgd-dev
+
+before_install:
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update        ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install libgd ; fi
+
+notifications:
+  email:
+    - bob@rud.is
+  irc:
+    channels:
+      - "irc.rud.is#builds"
+    nick: travisci
