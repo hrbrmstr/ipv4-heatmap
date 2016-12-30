@@ -49,7 +49,7 @@ OBJS=\
 	cidr.o
 
 ipv4-heatmap: ${OBJS}
-	${CC} ${LDFLAGS} -o $@ ${OBJS}
+	${CC} -o $@ ${OBJS} ${LDFLAGS}
 
 clean:
 	rm -f ${OBJS}
