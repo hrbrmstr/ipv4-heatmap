@@ -1,3 +1,7 @@
+# 2017-04-20
+
+- Added `iana-labels.txt` back in (@blackswanburst); Fixes #20
+
 # 2016-09-28
 
 - Fixed #1 (needed to add `-lm` to the `Makefile`)
